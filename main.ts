@@ -23,7 +23,7 @@ export default class ImageRenamerPlugin extends Plugin {
             const line = editor.getLine(cursor.line);
             const ch = cursor.ch;
 
-            const patterns = [
+            const patterns: { regex: RegExp; kind: 'wiki' | 'inline' }[] = [
                 { regex: /\!\[\[(.+?)(\|.*?)*\]\]/g, kind: 'wiki' },      // ![[...]] 语法
                 { regex: /\!\[.*?\]\((.+?)\)/g, kind: 'inline' }          // ![alt](path) 语法
             ];
@@ -35,12 +35,13 @@ export default class ImageRenamerPlugin extends Plugin {
                     const end = p.regex.lastIndex;
                     if (start <= ch && ch <= end) {
                         const rawLink = m[1];
+                        const fullMatch = m[0];
                         menu.addItem(item => item
                             .setTitle('AutoRename Image')
                             .setIcon('dice')
                             .onClick(async () => {
                                 try {
-                                    await this.autoRenameImage(view, editor, cursor.line, start, end, rawLink, p.kind, m[0]);
+                                    await this.autoRenameImage(view, editor, cursor.line, start, end, rawLink, p.kind, fullMatch);
                                 } catch (e) {
                                     new Notice('AutoRename failed: ' + (e?.message ?? String(e)));
                                 }
@@ -82,6 +83,11 @@ export default class ImageRenamerPlugin extends Plugin {
         // 排除外部链接
         if (/^[a-zA-Z]+:\/\//.test(link)) {
             new Notice('外部图片无法重命名');
+            return;
+        }
+
+        if (!view || !view.file) {
+            new Notice('当前视图无文件，无法重命名');
             return;
         }
 
@@ -156,7 +162,7 @@ export default class ImageRenamerPlugin extends Plugin {
         const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
         // 找到文档中的图片链接（wiki 和 inline）
-        const patterns = [
+        const patterns: { regex: RegExp; kind: 'wiki' | 'inline' }[] = [
             { regex: /\!\[\[(.+?)(\|.*?)*\]\]/g, kind: 'wiki' },
             { regex: /\!\[([^\]]*?)\]\((.+?)\)/g, kind: 'inline' } // capture alt and path
         ];
