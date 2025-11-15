@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
-	"version": "1.0.0",
+	"id": "image-renamer",
+	"name": "Image Renamer",
+	"version": "0.1.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "Renames images based on specified criteria.",
+	"author": "Vicy",
+	"authorUrl": "https://vicy.md",
+	"fundingUrl": "https://vicy.md/pricing",
 	"isDesktopOnly": false
 }
