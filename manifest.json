@@ -5,7 +5,6 @@
 	"minAppVersion": "0.15.0",
 	"description": "Renames images based on specified criteria.",
 	"author": "Vicy",
-	"authorUrl": "https://vicy.md",
-	"fundingUrl": "https://vicy.md/pricing",
+	"authorUrl": "https://github.com/vice2city",
 	"isDesktopOnly": false
 }
